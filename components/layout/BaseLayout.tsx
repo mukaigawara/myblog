@@ -11,10 +11,12 @@ export const BaseLayout = (props: BaseLayoutProps) => {
   const { children } = props
   return (
     <>
-      <Box w={'100%'} bg={'green'}>
-        <Box w={'80%'} mx={'auto'}>
+      <Box w={'100%'} bg={'#F2F2F2'}>
+        <Box w={'80%'} mx={'auto'} pt={'12px'}>
           <Navbar />
-          <Box bg={'yellow'}>{children}</Box>
+          <Box minHeight={'90vh'} mt={'85px'}>
+            {children}
+          </Box>
           <Footer />
         </Box>
       </Box>
