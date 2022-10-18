@@ -4,10 +4,9 @@ export const Footer = () => {
   return (
     <Box
       h={'100px'}
-      bg={'white'}
+      bg={'#0f3460'}
       mx={'auto'}
       w={'100%'}
-      borderRadius={'xl'}
     ></Box>
   )
 }

@@ -6,15 +6,12 @@ export const Navbar = () => {
   return (
     <Box
       h={'60px'}
-      //   bg={'white'}
-      //   mx={'auto'}
-      //   boxShadow={'md'}
-      //   borderRadius={'lg'}
-      //   position={'sticky'}
-      //   top={'20px'}
-      borderBottom={'1px'}
+      bg={'gray.100'}
+      boxShadow={'inner'}
+      borderRadius={'lg'}
       borderColor={'#413F42'}
       color={'#0F3460'}
+      p={2}
     >
       <HStack px={4}>
         <Heading>Blog</Heading>
