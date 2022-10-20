@@ -1,22 +1,20 @@
 import { Box, Link, Stack, Text } from '@chakra-ui/react'
-import type { NextPage } from 'next'
 import { BaseLayout } from '../components/layout/BaseLayout'
-
-import { client } from '../libs/client'
-import { Article } from '../types/article'
+import { getAllPostsData } from '../src/lib/blog/getMarkdownBlog'
 
 interface HomePageProps {
-  articles: Article[]
+  allPostsData: any[]
 }
 
-export default function HomePage({ articles }: HomePageProps) {
+export default function HomePage(props: HomePageProps) {
+  const { allPostsData } = props
   return (
     <>
       <BaseLayout>
         <Box h={'1099px'} w={'500px'}>
           <Stack>
-            {articles.map((article) => (
-              <Link href={`/blog/${article.id}`}>{article.id}</Link>
+            {allPostsData.map((data) => (
+              <Link href={`/blog/${data.filename}`}>{data.filename}</Link>
             ))}
           </Stack>
         </Box>
@@ -26,12 +24,11 @@ export default function HomePage({ articles }: HomePageProps) {
 }
 
 export const getStaticProps = async () => {
-  const endpoint = 'blogs'
-  const data = await client.get({ endpoint })
+  const allPostsData = getAllPostsData()
 
   return {
     props: {
-      articles: data.contents || [],
+      allPostsData,
     },
   }
 }
