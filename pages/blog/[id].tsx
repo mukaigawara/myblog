@@ -3,34 +3,29 @@ import { BaseLayout } from '../../components/layout/BaseLayout'
 import { Article } from '../../types/article'
 import 'highlight.js/styles/night-owl.css'
 import styles from '../../styles/blogDetail.module.css'
-import { getAllPostIds, getPostData } from '../../src/lib/blog/getMarkdownBlog'
+import { getAllPostIds, getBlogData } from '../../src/lib/blog'
 import { MDXRemote } from 'next-mdx-remote'
-import Head from 'next/head'
+import { Component, ReactNode } from 'react'
+import { mdxComponents } from '../../components/blog/mdxComponents'
 
 interface blogDetailPageProps {
   article: Article
   content: string
   source: any
   id: string
-  // meta: any
+  meta: any
 }
+// export const mdxComponents: any = {
+//   h2: (props: any) => <Heading className={styles.articleTitle} {...props} />,
+// }
 
+// const components = { mdxComponents }
 export default function blogDetailPage(props: blogDetailPageProps) {
-  const { content, source, id } = props
+  const { content, source, id, meta } = props
   console.log(source)
+
   return (
     <>
-      {/* <Head>
-        <title>{`${meta.title} | 可茂IT塾`}</title>
-        <meta name="description" content={meta.description} key="description" />
-        <meta property="og:url" content={url} key="og:url" />
-        <meta property="og:title" content={meta.title} key="og:title" />
-        <meta
-          property="og:description"
-          content={meta.description}
-          key="og:description"
-        />
-      </Head> */}
       <BaseLayout>
         <Box>
           <Box as={'main'} mt={'40px'} w={'85%'} bg={''}>
@@ -42,7 +37,7 @@ export default function blogDetailPage(props: blogDetailPageProps) {
                     fontSize={'45px'}
                     className={styles.articleTitle}
                   >
-                    'article.title'
+                    {meta.title}
                   </Heading>
                 </Box>
               </Box>
@@ -76,9 +71,7 @@ export default function blogDetailPage(props: blogDetailPageProps) {
               <div className="mdx">
                 <MDXRemote
                   {...source}
-                  // components={{
-                  //   ...MDX_COMPONENTS,
-                  // }}
+                  components={mdxComponents}
                   // scope={meta}
                   lazy
                 />
@@ -100,13 +93,13 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps = async ({ params }: any) => {
-  const { data, mdxSource } = await getPostData(params.id)
+  const { data, mdxSource } = await getBlogData(params.id)
 
   return {
     props: {
       id: params.id,
       source: mdxSource,
-      // meta: data,
+      meta: data,
     },
   }
 }

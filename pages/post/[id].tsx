@@ -3,7 +3,7 @@ import { BaseLayout } from '../../components/layout/BaseLayout'
 import { Article } from '../../types/article'
 import 'highlight.js/styles/night-owl.css'
 import styles from '../../styles/blogDetail.module.css'
-import { getAllPostIds, getPostData } from '../../src/lib/blog/getMarkdownBlog'
+import { getAllPostIds, getPostData } from '../../src/lib/blog'
 import { MDXRemote } from 'next-mdx-remote'
 import Head from 'next/head'
 import { ReactNode } from 'react'
@@ -15,21 +15,7 @@ interface blogDetailPageProps {
   id: string
   meta: any
 }
-export const mdxComponents: any = {
-  h2: (props: any) => <CustomHeading as="h2" {...props} />,
-  h3: (props: any) => <CustomHeading as="h3" {...props} />,
-}
 
-type Props = {
-  as: 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-  children: ReactNode
-}
-
-const CustomHeading: any = ({ as, children }: { as: any; children: any }) => {
-  const CustomTag = as
-  return <CustomTag>{children}</CustomTag>
-}
-const conpoment = { mdxComponents }
 export default function blogDetailPage(props: blogDetailPageProps) {
   const { content, mdxSource, id, meta } = props
   return (

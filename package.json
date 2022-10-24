@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.10.4",
     "@mapbox/rehype-prism": "^0.8.0",
     "@mdx-js/loader": "^2.1.5",
+    "@mdx-js/mdx": "^2.1.5",
     "@next/mdx": "^12.3.1",
     "babel-loader": "^8.2.5",
     "cheerio": "^1.0.0-rc.12",

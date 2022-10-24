@@ -7,7 +7,10 @@ import externalLinks from 'rehype-external-links'
 import lazyLoadPlugin from 'rehype-plugin-image-native-lazy-loading'
 
 // <root>/posts/docs/配下の.mdxファイルを指定。
-const docsDirectory = path.join(process.cwd(), 'posts/docs')
+const blogsDirectory = path.join(process.cwd(), 'posts/blog')
+const baseDirectory = path.join(process.cwd(), 'posts')
+const postsDirectory = path.join(baseDirectory, 'blog')
+// const seriesDirectory = path.join(baseDirectory, 'series')
 
 // // 全ての.mdxのファイル名の配列を返す
 // export const getMarkdownPostsPaths = async () => {
@@ -37,10 +40,10 @@ const docsDirectory = path.join(process.cwd(), 'posts/docs')
 // }
 
 export function getAllPostsData() {
-  const filenames = fs.readdirSync(docsDirectory)
+  const filenames = fs.readdirSync(blogsDirectory)
 
   const posts = filenames.map((filename) => {
-    const filePath = path.join(docsDirectory, filename)
+    const filePath = path.join(blogsDirectory, filename)
     const fileContents = fs.readFileSync(filePath, 'utf8')
     const matterResult = matter(fileContents).data
 
@@ -54,7 +57,7 @@ export function getAllPostsData() {
 }
 
 export function getAllPostIds() {
-  const fileNames = fs.readdirSync(docsDirectory)
+  const fileNames = fs.readdirSync(blogsDirectory)
   return fileNames.map((fileName) => {
     return {
       params: {
@@ -63,15 +66,15 @@ export function getAllPostIds() {
     }
   })
 }
-export async function getPostData(id: string) {
-  const fullPath = path.join(docsDirectory, `${id}.mdx`)
+export async function getBlogData(id) {
+  const fullPath = path.join(blogsDirectory, `${id}.mdx`)
   console.log(fullPath)
 
   const { data, content } = matter(fs.readFileSync(fullPath, 'utf8'))
   const mdxSource = await serialize(content, {
-    mdxOptions: {
-      remarkPlugins: [[externalLinks, { target: '_blank' }]],
-    },
+    // mdxOptions: {
+    //   remarkPlugins: [[externalLinks, { target: '_blank' }]],
+    // },
   })
 
   // データを id および contentHtml と組み合わせる
@@ -79,4 +82,36 @@ export async function getPostData(id: string) {
     data,
     mdxSource,
   }
+}
+
+export function getSortedPostsData() {
+  // /posts　配下のファイル名を取得する
+  const fileNames = fs.readdirSync(postsDirectory)
+  const allPostsData = fileNames.map((fileName) => {
+    // id を取得するためにファイル名から ".md" を削除する
+    const id = fileName.replace(/\.mdx$/, '')
+
+    // マークダウンファイルを文字列として読み取る
+    const fullPath = path.join(postsDirectory, fileName)
+    const fileContents = fs.readFileSync(fullPath, 'utf8')
+
+    // 投稿のメタデータ部分を解析するために gray-matter を使う
+    const matterResult = matter(fileContents)
+
+    // データを id と合わせる
+    return {
+      id,
+      ...matterResult.data,
+    }
+  })
+  // 投稿を日付でソートする
+  const sortedAllPostsData = allPostsData.sort((a, b) => {
+    if (a.date < b.date) {
+      return 1
+    } else {
+      return -1
+    }
+  })
+
+  return sortedAllPostsData.filter((p) => p.private == null)
 }
