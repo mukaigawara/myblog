@@ -19,3 +19,17 @@ export function getSortedPostsData() {
     }
   })
 }
+export function getAllPostTags() {
+  const posts = getAllPostsData()
+  const ret = []
+
+  const filteredPosts = posts.filter((p) => p.meta.private == null)
+
+  filteredPosts.forEach((post) => {
+    post.meta.tags.forEach((e) => {
+      ret.push({ params: { tag: e } })
+    })
+  })
+
+  return ret
+}

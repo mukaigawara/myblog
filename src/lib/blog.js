@@ -115,3 +115,40 @@ export function getSortedPostsData() {
 
   return sortedAllPostsData.filter((p) => p.private == null)
 }
+
+export function getAllPostTags() {
+  const posts = getAllPostsData()
+  const ret = []
+
+  const filteredPosts = posts.filter((p) => p.meta.private == null)
+
+  filteredPosts.forEach((post) => {
+    post.meta.tags.forEach((e) => {
+      ret.push({ params: { tag: e } })
+    })
+  })
+
+  return ret
+}
+
+export function getSortedTagPostsData(tag) {
+  const posts = getAllPostsData()
+  const tagPosts = posts.filter((post) => post.meta.tags.includes(tag))
+
+  const tagPostsData = tagPosts.map((tagPost) => {
+    const id = tagPost.filename.replace(/\.mdx$/, '')
+    const matterResult = tagPost.meta
+    return {
+      id,
+      ...matterResult,
+    }
+  })
+
+  return tagPostsData.sort((a, b) => {
+    if (a.date < b.date) {
+      return 1
+    } else {
+      return -1
+    }
+  })
+}
