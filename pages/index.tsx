@@ -9,50 +9,21 @@ import {
 import { getCategoryPaths, getFileList, getFileName } from '../src/lib/posts'
 import { getTagList } from '../src/lib/tags'
 import { IoIosArrowForward } from 'react-icons/io'
+import { CategoryList } from '../components/Category/CategoryList'
 
 interface HomePageProps {
-  allPostsData: any[]
-  allPostTags: any[]
   categories: string[]
 }
 
 export default function HomePage(props: HomePageProps) {
-  const { allPostsData, allPostTags, categories } = props
-  const tags = getTagList(allPostTags)
+  const { categories } = props
 
   return (
     <>
       <BaseLayout>
         <Box h={'1099px'} w={'500px'}>
           {/* <Heading>CATEGORY</Heading> */}
-          <Stack>
-            {categories.map((data) => (
-              <Link
-                key={data}
-                href={`/chategory/${data}`}
-                textDecoration={'none'}
-                _hover={{ textDecoration: 'none' }}
-              >
-                {/* {data.name + `${data.count}`} */}
-                <Box
-                  p={3}
-                  // bgColor={'gray.200'}
-                  borderRadius={'xl'}
-                  // boxShadow={'xl'}
-                  color={'#0f3460'}
-                >
-                  <HStack align={'end'}>
-                    <Heading fontSize={'50px'} _hover={{ color: '#39587e' }}>
-                      {data}
-                    </Heading>
-                    <Box pb={2}>
-                      <IoIosArrowForward size={'25px'} />
-                    </Box>
-                  </HStack>
-                </Box>
-              </Link>
-            ))}
-          </Stack>
+          <CategoryList categories={categories} />
         </Box>
       </BaseLayout>
     </>

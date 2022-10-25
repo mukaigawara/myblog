@@ -45,8 +45,6 @@ export function getFileName() {
   fileNames.forEach((fileName) => {
     result.push({ params: { category: fileName } })
   })
-  // { params: { id: '1' } }
-  console.log(result)
   return result
 }
 export function getCategoryPaths() {
@@ -96,11 +94,10 @@ export function getFileListOfCategory(category) {
   const allFileList = getFileList()
   allFileList.forEach((e) => {
     if (e.category === category) {
-      console.log(e.data)
       resultAry = e.data
     }
   })
-  console.log('resultAry', resultAry)
+  // console.log('resultAry', resultAry)
   return resultAry
 }
 
