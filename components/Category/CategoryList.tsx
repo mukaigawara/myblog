@@ -13,7 +13,7 @@ export const CategoryList = (props: CategoryListProps) => {
       {categories.map((data) => (
         <Link
           key={data}
-          href={`/chategory/${data}`}
+          href={`/category/${data}`}
           textDecoration={'none'}
           _hover={{ textDecoration: 'none' }}
         >
