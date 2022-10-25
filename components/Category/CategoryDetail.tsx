@@ -19,7 +19,7 @@ interface HomePageProps {
   }[]
 }
 
-export default function ChategoryDetailPage(props: HomePageProps) {
+export default function ChategoryDetail(props: HomePageProps) {
   const { allPostsData, allPostTags, tag, fileList } = props
 
   return (

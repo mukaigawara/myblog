@@ -1,4 +1,4 @@
-import { Box, Heading, Link, Stack, Text } from '@chakra-ui/react'
+import { Box, Heading, HStack, Link, Stack, Text } from '@chakra-ui/react'
 import { BaseLayout } from '../components/layout/BaseLayout'
 import {
   getAllPostIds,
@@ -8,6 +8,7 @@ import {
 } from '../src/lib/blog'
 import { getCategoryPaths, getFileList, getFileName } from '../src/lib/posts'
 import { getTagList } from '../src/lib/tags'
+import { IoIosArrowForward } from 'react-icons/io'
 
 interface HomePageProps {
   allPostsData: any[]
@@ -40,9 +41,14 @@ export default function HomePage(props: HomePageProps) {
                   // boxShadow={'xl'}
                   color={'#0f3460'}
                 >
-                  <Heading fontSize={'50px'} _hover={{ color: '#39587e' }}>
-                    {data}
-                  </Heading>
+                  <HStack align={'end'}>
+                    <Heading fontSize={'50px'} _hover={{ color: '#39587e' }}>
+                      {data}
+                    </Heading>
+                    <Box pb={2}>
+                      <IoIosArrowForward size={'25px'} />
+                    </Box>
+                  </HStack>
                 </Box>
               </Link>
             ))}

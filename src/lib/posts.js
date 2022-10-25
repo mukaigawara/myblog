@@ -40,11 +40,14 @@ export function getAllPostTags() {
 }
 
 export function getFileName() {
+  const result = []
   const fileNames = fs.readdirSync(docsDirectory)
-  // console.log(fileNames)
-  const seriesDirectory = path.join(docsDirectory, 'react')
-  // console.log(fs.readdirSync(seriesDirectory))
-  return fileNames
+  fileNames.forEach((fileName) => {
+    result.push({ params: { category: fileName } })
+  })
+  // { params: { id: '1' } }
+  console.log(result)
+  return result
 }
 export function getCategoryPaths() {
   return fs.readdirSync(docsDirectory)
@@ -78,7 +81,7 @@ export function getFileList() {
     results.push(obj)
   })
 
-  console.log('%o', results)
+  // console.log('%o', results)
   return results
 }
 
