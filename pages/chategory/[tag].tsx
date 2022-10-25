@@ -1,4 +1,4 @@
-import { Box, Heading, Link, Stack, Text } from '@chakra-ui/react'
+import { Box, Heading, HStack, Icon, Link, Stack, Text } from '@chakra-ui/react'
 import { BaseLayout } from '../../components/layout/BaseLayout'
 import {
   getSortedPostsData,
@@ -6,30 +6,64 @@ import {
   getSortedTagPostsData,
 } from '../../src/lib/blog'
 import { getTagList } from '../../src/lib/tags'
+import { getFileListOfCategory, getFileName } from '../../src/lib/posts'
+import { MdOutlineInsertDriveFile } from 'react-icons/md'
 
 interface HomePageProps {
   allPostsData: any[]
   allPostTags: any[]
   tag: string
+  fileList: {
+    series: string
+    fileNames: any[]
+  }[]
 }
 
 export default function ChategoryDetailPage(props: HomePageProps) {
-  const { allPostsData, allPostTags, tag } = props
+  const { allPostsData, allPostTags, tag, fileList } = props
 
   return (
     <>
       <BaseLayout>
         <Box h={'1099px'} w={'500px'}>
-          <Heading mt={'20px'} fontSize={'50px'} color={'#0f3460'}>
+          <Heading
+            my={'80px'}
+            fontSize={'90px'}
+            color={'#2d4a6e'}
+            borderRadius={'3xl'}
+            bg={'#f2f2f2'}
+          >
             {tag}
           </Heading>
           <Box mt={'20px'}>
-            <Heading fontSize={'30px'} color={'#0f3460'}>
-              環境構築など
-            </Heading>
-            <Stack>
-              {allPostsData.map((data) => (
-                <Text>{data.id}</Text>
+            <Stack spacing={10}>
+              {fileList.map((data) => (
+                <>
+                  <HStack
+                    borderBottom={'1px rgba(154, 182, 204, 0.591) solid'}
+                    align="end"
+                    py={2}
+                  >
+                    <Heading fontSize={'30px'} color={'#0f3460'}>
+                      {data.series}
+                    </Heading>
+                    <Text fontSize={'20px'} color={'gray.700'}>
+                      {data.fileNames.length}
+                    </Text>
+                  </HStack>
+
+                  <HStack>
+                    <MdOutlineInsertDriveFile />
+                    <Text
+                      fontWeight={'bold'}
+                      color={'gray.700'}
+                      pl={2}
+                      key={data.series}
+                    >
+                      {data.fileNames}
+                    </Text>
+                  </HStack>
+                </>
               ))}
             </Stack>
           </Box>
@@ -42,19 +76,20 @@ export default function ChategoryDetailPage(props: HomePageProps) {
 export const getStaticProps = async ({ params }: any) => {
   const allPostsData = getSortedTagPostsData(params.tag)
   const allPostTags = getAllPostTags()
+  const fileList = getFileListOfCategory(params.tag)
   const tag = params.tag
   return {
     props: {
       allPostsData,
       allPostTags,
       tag,
+      fileList,
     },
   }
 }
 
 export const getStaticPaths = async () => {
   const paths = getAllPostTags()
-  console.log(paths)
 
   return {
     paths,

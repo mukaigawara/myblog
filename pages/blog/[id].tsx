@@ -22,7 +22,6 @@ interface blogDetailPageProps {
 // const components = { mdxComponents }
 export default function blogDetailPage(props: blogDetailPageProps) {
   const { content, source, id, meta } = props
-  console.log(source)
 
   return (
     <>

@@ -1,3 +1,8 @@
+import path from 'path'
+import fs from 'fs'
+const baseDirectory = path.join(process.cwd(), 'posts')
+const docsDirectory = path.join(baseDirectory, 'docs')
+
 export function getSortedPostsData() {
   // /posts　配下のファイル名を取得する
   const fileNames = fs.readdirSync(postsDirectory)
@@ -32,4 +37,74 @@ export function getAllPostTags() {
   })
 
   return ret
+}
+
+export function getFileName() {
+  const fileNames = fs.readdirSync(docsDirectory)
+  // console.log(fileNames)
+  const seriesDirectory = path.join(docsDirectory, 'react')
+  // console.log(fs.readdirSync(seriesDirectory))
+  return fileNames
+}
+export function getCategoryPaths() {
+  return fs.readdirSync(docsDirectory)
+}
+
+export function getSeriesData(_category) {
+  const seriesDirectory = path.join(docsDirectory, _category)
+  return fs.readdirSync(seriesDirectory)
+}
+
+export function getFileList() {
+  const results = []
+
+  const categoryNames = fs.readdirSync(docsDirectory)
+  categoryNames.forEach((category) => {
+    const obj = {}
+    obj.category = category
+
+    const filePath = path.join(docsDirectory, category)
+    const categories = fs.readdirSync(filePath)
+    const seriesAry = []
+    categories.forEach((series) => {
+      let dataObj = {}
+      const fileNames = getfileNameOfSeries(series, category)
+      const replaceFileNames = replaceMdxPath(fileNames)
+      dataObj.series = series
+      dataObj.fileNames = replaceFileNames
+      seriesAry.push(dataObj)
+    })
+    obj.data = seriesAry
+    results.push(obj)
+  })
+
+  console.log('%o', results)
+  return results
+}
+
+export function getfileNameOfSeries(_series, _category) {
+  const filePath = path.join(docsDirectory, `${_category}/${_series}`)
+  const files = fs.readdirSync(filePath)
+  return files
+}
+
+export function getFileListOfCategory(category) {
+  let resultAry = []
+  const allFileList = getFileList()
+  allFileList.forEach((e) => {
+    if (e.category === category) {
+      console.log(e.data)
+      resultAry = e.data
+    }
+  })
+  console.log('resultAry', resultAry)
+  return resultAry
+}
+
+export function replaceMdxPath(array) {
+  // listのmdxを取り除いて返す
+  array.forEach((m) => {
+    m.replace(/\.mdx$/, '')
+  })
+  return array
 }

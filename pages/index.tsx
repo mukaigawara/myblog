@@ -6,17 +6,18 @@ import {
   getAllPostTags,
   getSortedPostsData,
 } from '../src/lib/blog'
+import { getCategoryPaths, getFileList, getFileName } from '../src/lib/posts'
 import { getTagList } from '../src/lib/tags'
 
 interface HomePageProps {
   allPostsData: any[]
   allPostTags: any[]
+  categories: string[]
 }
 
 export default function HomePage(props: HomePageProps) {
-  const { allPostsData, allPostTags } = props
+  const { allPostsData, allPostTags, categories } = props
   const tags = getTagList(allPostTags)
-  console.log(tags)
 
   return (
     <>
@@ -24,10 +25,10 @@ export default function HomePage(props: HomePageProps) {
         <Box h={'1099px'} w={'500px'}>
           {/* <Heading>CATEGORY</Heading> */}
           <Stack>
-            {tags.map((data) => (
+            {categories.map((data) => (
               <Link
-                key={data.name}
-                href={`/chategory/${data.name}`}
+                key={data}
+                href={`/chategory/${data}`}
                 textDecoration={'none'}
                 _hover={{ textDecoration: 'none' }}
               >
@@ -39,8 +40,8 @@ export default function HomePage(props: HomePageProps) {
                   // boxShadow={'xl'}
                   color={'#0f3460'}
                 >
-                  <Heading fontSize={'30px'} _hover={{ color: '#39587e' }}>
-                    {'・' + data.name + ` [ articles :  ${data.count} ] `}
+                  <Heading fontSize={'50px'} _hover={{ color: '#39587e' }}>
+                    {data}
                   </Heading>
                 </Box>
               </Link>
@@ -55,10 +56,13 @@ export default function HomePage(props: HomePageProps) {
 export const getStaticProps = async () => {
   const allPostsData = getSortedPostsData()
   const allPostTags = getAllPostTags()
+  const categories = getCategoryPaths()
+
   return {
     props: {
       allPostsData,
       allPostTags,
+      categories,
     },
   }
 }
