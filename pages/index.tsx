@@ -22,7 +22,6 @@ export default function HomePage(props: HomePageProps) {
     <>
       <BaseLayout>
         <Box h={'1099px'} w={'500px'}>
-          {/* <Heading>CATEGORY</Heading> */}
           <CategoryList categories={categories} />
         </Box>
       </BaseLayout>
