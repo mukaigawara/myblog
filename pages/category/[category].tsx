@@ -95,8 +95,7 @@ interface TagDetailPageProps {
 }
 const TagDetailPageContent = (props: TagDetailPageProps) => {
   const { tag, fileList } = props
-  console.log(fileList)
-
+  // console.log(fileList)
   return (
     <>
       <Box>
@@ -135,6 +134,7 @@ const TagDetailPageContent = (props: TagDetailPageProps) => {
                     <HStack>
                       <MdOutlineInsertDriveFile />
                       <Link
+                        // href={`/category/react/test.mdx`}
                         fontWeight={'bold'}
                         color={'gray.700'}
                         pl={2}
