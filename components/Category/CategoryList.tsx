@@ -10,10 +10,10 @@ export const CategoryList = (props: CategoryListProps) => {
   const { categories } = props
   return (
     <Stack>
-      {categories.map((data) => (
+      {categories.map((category) => (
         <Link
-          key={data}
-          href={`/category/${data}`}
+          key={category}
+          href={`/blogs/${category}`}
           textDecoration={'none'}
           _hover={{ textDecoration: 'none' }}
         >
@@ -31,7 +31,7 @@ export const CategoryList = (props: CategoryListProps) => {
               </Box>
 
               <Heading fontSize={'40px'} _hover={{ color: '#39587e' }}>
-                {data}
+                {category}
               </Heading>
               <Box pb={2}>
                 <IoIosArrowForward size={'25px'} />

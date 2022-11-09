@@ -2,30 +2,20 @@ import {
   Box,
   Heading,
   HStack,
-  Icon,
   Link,
   Spacer,
   Stack,
   Text,
-  VStack,
 } from '@chakra-ui/react'
-import { BaseLayout } from '../../components/layout/BaseLayout'
 import {
-  getSortedPostsData,
-  getAllPostTags,
-  getSortedTagPostsData,
-} from '../../src/lib/blog'
-import { getTagList } from '../../src/lib/tags'
-import {
-  getCategoryPaths,
+  getAllCategories,
   getFileListOfCategory,
   getFileName,
-} from '../../src/lib/posts'
+} from '../../../src/lib/posts'
 import { MdOutlineInsertDriveFile, MdOutlineFolderOpen } from 'react-icons/md'
-import { children } from 'cheerio/lib/api/traversing'
-import { Footer } from '../../components/Footer'
-import { Navbar } from '../../components/Navbar'
-import { CategoryList } from '../../components/Category/CategoryList'
+import { Footer } from '../../../components/Footer'
+import { Navbar } from '../../../components/Navbar'
+import { CategoryList } from '../../../components/Category/CategoryList'
 
 interface HomePageProps {
   allPostsData: any[]
@@ -66,8 +56,8 @@ export default function ChategoryDetailPage(props: HomePageProps) {
 
 export const getStaticProps = async ({ params }: any) => {
   const fileList = getFileListOfCategory(params.category)
-  const categories = getCategoryPaths()
-  const tag = params.category
+  const categories = getAllCategories()
+  const tag = params.category as string
   return {
     props: {
       tag,
@@ -79,6 +69,13 @@ export const getStaticProps = async ({ params }: any) => {
 
 export const getStaticPaths = async () => {
   const paths = getFileName()
+  // const paths = [
+  //   { params: { category: 'fireBase' } },
+  //   { params: { category: 'react' } },
+  //   { params: { category: 'typeScript' } },
+  // ]
+
+  console.log(paths)
 
   return {
     paths,
@@ -129,19 +126,19 @@ const TagDetailPageContent = (props: TagDetailPageProps) => {
                   </Text>
                 </HStack>
 
-                {data.fileNames.map((m: string) => {
+                {data.fileNames.map((fileName: string) => {
                   return (
                     <HStack>
                       <MdOutlineInsertDriveFile />
                       <Link
-                        // href={`/category/react/test.mdx`}
+                        href={`/blogs/react/${fileName}`}
                         fontWeight={'bold'}
                         color={'gray.700'}
                         pl={2}
-                        key={data.series}
+                        key={fileName}
                         _hover={{ textDecoration: 'none', color: 'gray.400' }}
                       >
-                        {m}
+                        {fileName}
                       </Link>
                     </HStack>
                   )

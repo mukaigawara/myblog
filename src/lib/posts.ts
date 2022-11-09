@@ -1,17 +1,19 @@
 import path from 'path'
 import fs from 'fs'
+import { getAllPostsData } from './blog'
+import matter from 'gray-matter'
 const baseDirectory = path.join(process.cwd(), 'posts')
 const docsDirectory = path.join(baseDirectory, 'docs')
 
 export function getSortedPostsData() {
   // /posts　配下のファイル名を取得する
-  const fileNames = fs.readdirSync(postsDirectory)
+  const fileNames = fs.readdirSync(docsDirectory)
   const allPostsData = fileNames.map((fileName) => {
     // id を取得するためにファイル名から ".md" を削除する
     const id = fileName.replace(/\.mdx$/, '')
 
     // マークダウンファイルを文字列として読み取る
-    const fullPath = path.join(postsDirectory, fileName)
+    const fullPath = path.join(docsDirectory, fileName)
     const fileContents = fs.readFileSync(fullPath, 'utf8')
 
     // 投稿のメタデータ部分を解析するために gray-matter を使う
@@ -26,12 +28,12 @@ export function getSortedPostsData() {
 }
 export function getAllPostTags() {
   const posts = getAllPostsData()
-  const ret = []
+  const ret: any = []
 
-  const filteredPosts = posts.filter((p) => p.meta.private == null)
+  const filteredPosts = posts.filter((p: any) => p.meta.private == null)
 
-  filteredPosts.forEach((post) => {
-    post.meta.tags.forEach((e) => {
+  filteredPosts.forEach((post: any) => {
+    post.meta.tags.forEach((e: any) => {
       ret.push({ params: { tag: e } })
     })
   })
@@ -40,36 +42,36 @@ export function getAllPostTags() {
 }
 
 export function getFileName() {
-  const result = []
+  const result: { params: { category: string } }[] = []
   const fileNames = fs.readdirSync(docsDirectory)
   fileNames.forEach((fileName) => {
-    result.push({ params: { category: fileName } })
+    result.push({ params: { category: fileName.toString() } })
   })
   return result
 }
-export function getCategoryPaths() {
+export function getAllCategories() {
   return fs.readdirSync(docsDirectory)
 }
 
-export function getSeriesData(_category) {
+export function getSeriesData(_category: string) {
   const seriesDirectory = path.join(docsDirectory, _category)
   return fs.readdirSync(seriesDirectory)
 }
 
 export function getFileList() {
-  const results = []
+  const results: any = []
 
   const categoryNames = fs.readdirSync(docsDirectory)
   categoryNames.forEach((category) => {
-    const obj = {}
+    const obj: any = {}
     obj.category = category
 
     const filePath = path.join(docsDirectory, category)
     const categories = fs.readdirSync(filePath)
-    const seriesAry = []
+    const seriesAry: any = []
     categories.forEach((series) => {
-      let dataObj = {}
-      const fileNames = getfileNameOfSeries(series, category)
+      let dataObj: any = {}
+      const fileNames = getIdOfSeries(category, series)
       const replaceFileNames = replaceMdxPath(fileNames)
       dataObj.series = series
       dataObj.fileNames = replaceFileNames
@@ -83,16 +85,43 @@ export function getFileList() {
   return results
 }
 
-export function getfileNameOfSeries(_series, _category) {
-  const filePath = path.join(docsDirectory, `${_category}/${_series}`)
+export function getIdOfSeries(category: string, series: string) {
+  const filePath = path.join(docsDirectory, `${category}/${series}`)
   const files = fs.readdirSync(filePath)
   return files
 }
 
-export function getFileListOfCategory(category) {
-  let resultAry = []
+export function getAllIdOfCategory(_category: string) {
+  const series = getSeriesNameOfCategory(_category)
+  let results: string[] = []
+
+  series.forEach((_series) => {
+    const filePath = path.join(docsDirectory, `${_category}/${_series}`)
+    const files = fs.readdirSync(filePath)
+    results = results.concat(files)
+  })
+  return results
+}
+
+export function getAllIdOfCategories(_categories: string[]) {
+  let results: string[] = []
+  _categories.forEach((category) => {
+    results = results.concat(getAllIdOfCategory(category))
+  })
+  return results
+}
+
+export function getSeriesNameOfCategory(_category: string) {
+  const filePath = path.join(docsDirectory, `${_category}`)
+  const files = fs.readdirSync(filePath)
+
+  return files
+}
+
+export function getFileListOfCategory(category: string) {
+  let resultAry: any[] = []
   const allFileList = getFileList()
-  allFileList.forEach((e) => {
+  allFileList.forEach((e: any) => {
     if (e.category === category) {
       resultAry = e.data
     }
@@ -101,7 +130,7 @@ export function getFileListOfCategory(category) {
   return resultAry
 }
 
-export function replaceMdxPath(array) {
+export function replaceMdxPath(array: any[]) {
   // listのmdxを取り除いて返す
   array.forEach((m) => {
     m.replace(/\.mdx$/, '')
