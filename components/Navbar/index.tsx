@@ -21,7 +21,7 @@ export const Navbar = () => {
         <Heading
           color={'gray.500'}
           onClick={() => {
-            router.push('/category')
+            router.push('/')
           }}
         >
           MUKAI Blog

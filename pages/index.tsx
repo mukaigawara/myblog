@@ -6,7 +6,7 @@ import {
   getAllPostTags,
   getSortedPostsData,
 } from '../src/lib/blog'
-import { getCategoryPaths, getFileList, getFileName } from '../src/lib/posts'
+import { getAllCategories, getFileList, getFileName } from '../src/lib/posts'
 import { getTagList } from '../src/lib/tags'
 import { IoIosArrowForward } from 'react-icons/io'
 import { CategoryList } from '../components/Category/CategoryList'
@@ -32,7 +32,7 @@ export default function HomePage(props: HomePageProps) {
 export const getStaticProps = async () => {
   const allPostsData = getSortedPostsData()
   const allPostTags = getAllPostTags()
-  const categories = getCategoryPaths()
+  const categories = getAllCategories()
 
   return {
     props: {
