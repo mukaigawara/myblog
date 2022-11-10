@@ -11,13 +11,14 @@ import {
   getPostData,
   getSeriesNameOfCategory,
 } from '../../../../src/lib/posts'
+import { Meta } from '../../../../types/types'
 
 type PageProps = {
   id: string
   category: string
   series: string
   source: any
-  meta: any
+  meta: Meta
 }
 
 export default function ExamplePage(props: PageProps) {
@@ -33,7 +34,6 @@ export default function ExamplePage(props: PageProps) {
                   <Heading
                     color={'#0f3460'}
                     fontSize={'45px'}
-                    // className={styles.articleTitle}
                   >
                     {meta.title}
                   </Heading>
@@ -50,17 +50,16 @@ export default function ExamplePage(props: PageProps) {
               >
                 <HStack spacing={2}>
                   <Text fontWeight={'bold'}>Tag : </Text>
-                  <Tag>Sample Tag</Tag>
-                  <Tag>Sample Tag</Tag>
-                  <Tag>Sample Tag</Tag>
+                  {meta.tags?.map((tag) => {
+                    return <Tag key={tag}>{tag}</Tag>
+                  })}
                 </HStack>
                 <HStack mt={2}>
-                  <Text fontWeight={'bold'}>createdAt : </Text>
-                  {/* <Text>{article.createdAt}</Text> */}
+                  <Text fontWeight={'bold'}>createdAt : {meta.date}</Text>
                 </HStack>
                 <HStack mt={2}>
-                  <Text fontWeight={'bold'}>revisedAt : </Text>
-                  {/* <Text>{article.revisedAt}</Text> */}
+                  /// TODO: revisedAtの時刻を表示させる
+                  <Text fontWeight={'bold'}>revisedAt : {meta.date}</Text>
                 </HStack>
               </Box>
             </Stack>
@@ -86,7 +85,6 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const paths: { params: { category: string; series: string; id: string } }[] =
     []
   const categories = getAllCategories()
-  // const ids = getAllIdOfCategories(categories)
 
   for (const category of categories) {
     const series = getSeriesNameOfCategory(category)
@@ -98,16 +96,20 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
     })
   }
 
-  console.log(paths)
-
   return {
     paths,
     fallback: false,
   }
 }
 
+type ExamplePageParams = {
+  id: string
+  series: string
+  category: string
+}
+
 export const getStaticProps: GetStaticProps<PageProps> = async (context) => {
-  const { id, series, category } = context.params as PageProps
+  const { id, series, category } = context.params as ExamplePageParams
   const { data, mdxSource } = await getPostData(category, series, id)
 
   const props: PageProps = {

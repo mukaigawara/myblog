@@ -83,7 +83,6 @@ export function getFileList() {
     results.push(obj)
   })
 
-  // console.log('%o', results)
   return results
 }
 
@@ -129,7 +128,6 @@ export function getFileListOfCategory(category: string) {
       resultAry = e.data
     }
   })
-  // console.log('resultAry', resultAry)
   return resultAry
 }
 
@@ -147,7 +145,6 @@ export async function getPostData(
   id: string
 ) {
   const fullPath = path.join(docsDirectory, `/${category}/${series}/${id}`)
-  console.log(fullPath)
 
   const { data, content } = matter(fs.readFileSync(fullPath, 'utf8'))
   const mdxSource = await serialize(content, {
