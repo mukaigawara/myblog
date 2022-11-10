@@ -66,23 +66,7 @@ export function getAllPostIds() {
     }
   })
 }
-export async function getBlogData(id) {
-  const fullPath = path.join(blogsDirectory, `${id}.mdx`)
-  console.log(fullPath)
 
-  const { data, content } = matter(fs.readFileSync(fullPath, 'utf8'))
-  const mdxSource = await serialize(content, {
-    // mdxOptions: {
-    //   remarkPlugins: [[externalLinks, { target: '_blank' }]],
-    // },
-  })
-
-  // データを id および contentHtml と組み合わせる
-  return {
-    data,
-    mdxSource,
-  }
-}
 
 export function getSortedPostsData() {
   // /posts　配下のファイル名を取得する

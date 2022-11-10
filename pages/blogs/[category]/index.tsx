@@ -26,10 +26,11 @@ interface HomePageProps {
     fileNames: any[]
   }[]
   categories: any[]
+  category: string
 }
 
 export default function ChategoryDetailPage(props: HomePageProps) {
-  const { tag, fileList, categories } = props
+  const { tag, fileList, categories, category } = props
 
   return (
     <>
@@ -42,7 +43,11 @@ export default function ChategoryDetailPage(props: HomePageProps) {
             </Box>
             <Spacer></Spacer>
             <Box borderRadius={'xl'} p={7} w={'700px'}>
-              <TagDetailPageContent tag={tag} fileList={fileList} />
+              <TagDetailPageContent
+                tag={tag}
+                fileList={fileList}
+                category={category}
+              />
             </Box>
             <Spacer></Spacer>
           </HStack>
@@ -55,6 +60,7 @@ export default function ChategoryDetailPage(props: HomePageProps) {
 }
 
 export const getStaticProps = async ({ params }: any) => {
+  const category = params.category
   const fileList = getFileListOfCategory(params.category)
   const categories = getAllCategories()
   const tag = params.category as string
@@ -62,6 +68,7 @@ export const getStaticProps = async ({ params }: any) => {
     props: {
       tag,
       fileList,
+      category,
       categories,
     },
   }
@@ -75,7 +82,7 @@ export const getStaticPaths = async () => {
   //   { params: { category: 'typeScript' } },
   // ]
 
-  console.log(paths)
+  // console.log(paths)
 
   return {
     paths,
@@ -89,10 +96,11 @@ interface TagDetailPageProps {
     series: string
     fileNames: string[]
   }[]
+  category: string
 }
 const TagDetailPageContent = (props: TagDetailPageProps) => {
-  const { tag, fileList } = props
-  // console.log(fileList)
+  const { tag, fileList, category } = props
+  console.log(fileList)
   return (
     <>
       <Box>
@@ -131,7 +139,7 @@ const TagDetailPageContent = (props: TagDetailPageProps) => {
                     <HStack>
                       <MdOutlineInsertDriveFile />
                       <Link
-                        href={`/blogs/react/${fileName}`}
+                        href={`/blogs/${category}/${data.series}/${fileName}`}
                         fontWeight={'bold'}
                         color={'gray.700'}
                         pl={2}

@@ -1,28 +1,27 @@
-import { Box, Heading, HStack, Stack, Tag, Text } from '@chakra-ui/react'
-import { BaseLayout } from '../../components/layout/BaseLayout'
-import { Article } from '../../types/article'
-import 'highlight.js/styles/night-owl.css'
-import styles from '../../styles/blogDetail.module.css'
-import { getAllPostIds } from '../../src/lib/blog'
+import { Stack, Heading, HStack, Tag, Box, Text } from '@chakra-ui/react'
+import { GetStaticPathsContext, GetStaticProps } from 'next'
 import { MDXRemote } from 'next-mdx-remote'
-import { Component, ReactNode } from 'react'
-import { mdxComponents } from '../../components/blog/mdxComponents'
+import { mdxComponents } from '../../../../components/blog/mdxComponents'
+import { BaseLayout } from '../../../../components/layout/BaseLayout'
+import {
+  getAllCategories,
+  getAllIdOfCategories,
+  getAllIdOfCategory,
+  getIdOfSeries,
+  getPostData,
+  getSeriesNameOfCategory,
+} from '../../../../src/lib/posts'
 
-interface blogDetailPageProps {
-  article: Article
-  content: string
-  source: any
+type PageProps = {
   id: string
+  category: string
+  series: string
+  source: any
   meta: any
 }
-// export const mdxComponents: any = {
-//   h2: (props: any) => <Heading className={styles.articleTitle} {...props} />,
-// }
 
-// const components = { mdxComponents }
-export default function blogDetailPage(props: blogDetailPageProps) {
-  const { content, source, id, meta } = props
-
+export default function ExamplePage(props: PageProps) {
+  const { id, category, meta, source } = props
   return (
     <>
       <BaseLayout>
@@ -34,7 +33,7 @@ export default function blogDetailPage(props: blogDetailPageProps) {
                   <Heading
                     color={'#0f3460'}
                     fontSize={'45px'}
-                    className={styles.articleTitle}
+                    // className={styles.articleTitle}
                   >
                     {meta.title}
                   </Heading>
@@ -83,22 +82,40 @@ export default function blogDetailPage(props: blogDetailPageProps) {
   )
 }
 
-export async function getStaticPaths() {
-  const paths = getAllPostIds()
+export async function getStaticPaths({ locales }: GetStaticPathsContext) {
+  const paths: { params: { category: string; series: string; id: string } }[] =
+    []
+  const categories = getAllCategories()
+  // const ids = getAllIdOfCategories(categories)
+
+  for (const category of categories) {
+    const series = getSeriesNameOfCategory(category)
+    series.forEach((_series) => {
+      const ids = getIdOfSeries(category, _series)
+      for (const id of ids) {
+        paths.push({ params: { category: category, series: _series, id: id } })
+      }
+    })
+  }
+
+  console.log(paths)
+
   return {
     paths,
     fallback: false,
   }
 }
 
-export const getStaticProps = async ({ params }: any) => {
-  const { data, mdxSource } = await getBlogData(params.id)
+export const getStaticProps: GetStaticProps<PageProps> = async (context) => {
+  const { id, series, category } = context.params as PageProps
+  const { data, mdxSource } = await getPostData(category, series, id)
 
-  return {
-    props: {
-      id: params.id,
-      source: mdxSource,
-      meta: data,
-    },
+  const props: PageProps = {
+    id: id,
+    source: mdxSource,
+    series: series,
+    meta: data,
+    category: category,
   }
+  return { props }
 }

@@ -2,6 +2,8 @@ import path from 'path'
 import fs from 'fs'
 import { getAllPostsData } from './blog'
 import matter from 'gray-matter'
+import { serialize } from 'next-mdx-remote/serialize'
+
 const baseDirectory = path.join(process.cwd(), 'posts')
 const docsDirectory = path.join(baseDirectory, 'docs')
 
@@ -111,6 +113,7 @@ export function getAllIdOfCategories(_categories: string[]) {
   return results
 }
 
+// categoryからseriesNameを返す
 export function getSeriesNameOfCategory(_category: string) {
   const filePath = path.join(docsDirectory, `${_category}`)
   const files = fs.readdirSync(filePath)
@@ -136,4 +139,26 @@ export function replaceMdxPath(array: any[]) {
     m.replace(/\.mdx$/, '')
   })
   return array
+}
+
+export async function getPostData(
+  category: string,
+  series: string,
+  id: string
+) {
+  const fullPath = path.join(docsDirectory, `/${category}/${series}/${id}`)
+  console.log(fullPath)
+
+  const { data, content } = matter(fs.readFileSync(fullPath, 'utf8'))
+  const mdxSource = await serialize(content, {
+    // mdxOptions: {
+    //   remarkPlugins: [[externalLinks, { target: '_blank' }]],
+    // },
+  })
+
+  // データを id および contentHtml と組み合わせる
+  return {
+    data,
+    mdxSource,
+  }
 }
