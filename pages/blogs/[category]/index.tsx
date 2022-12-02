@@ -76,13 +76,6 @@ export const getStaticProps = async ({ params }: any) => {
 
 export const getStaticPaths = async () => {
   const paths = getFileName()
-  // const paths = [
-  //   { params: { category: 'fireBase' } },
-  //   { params: { category: 'react' } },
-  //   { params: { category: 'typeScript' } },
-  // ]
-
-  // console.log(paths)
 
   return {
     paths,
@@ -100,7 +93,6 @@ interface TagDetailPageProps {
 }
 const TagDetailPageContent = (props: TagDetailPageProps) => {
   const { tag, fileList, category } = props
-  console.log(fileList)
   return (
     <>
       <Box>
@@ -136,7 +128,7 @@ const TagDetailPageContent = (props: TagDetailPageProps) => {
 
                 {data.fileNames.map((fileName: string) => {
                   return (
-                    <HStack>
+                    <HStack key={fileName}>
                       <MdOutlineInsertDriveFile />
                       <Link
                         href={`/blogs/${category}/${data.series}/${fileName}`}
